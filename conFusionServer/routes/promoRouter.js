@@ -2,29 +2,29 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const Leaders = require('../models/leaders');
+const Promos = require('../models/promotions');
 
-const leaderRouter = express.Router();
+const promoRouter = express.Router();
 
-leaderRouter.use(bodyParser.json());
+promoRouter.use(bodyParser.json());
 
-leaderRouter.route('/')
+promoRouter.route('/')
 .get((req, res, next) =>{
-   Leaders.find({})
-   .then((leaders) => {
+   Promos.find({})
+   .then((promos) => {
        res.statusCode = 200;
        res.setHeader('Content-Type', 'application/json');
-       res.json(leaders);
+       res.json(promos);
    }, (err)=> next(err))
    .catch((err) => next(err));
 })
 .post((req,res,next) => {
-    Leaders.create(req.body)
-    .then((leaders) => {
-        console.log('Promo created', leaders);
+    Promos.create(req.body)
+    .then((promo) => {
+        console.log('Promo created', promo);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(leaders);
+        res.json(promo);
     }, (err)=> next(err))
     .catch((err) => next(err));
 })
@@ -33,7 +33,7 @@ leaderRouter.route('/')
     res.end('PUT request not supported on /promos');
 })
 .delete((req, res, next) =>{
-    Leaders.remove({})
+    Promos.remove({})
     .then((resp) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -42,44 +42,44 @@ leaderRouter.route('/')
     .catch((err) => next(err));
 });
 
-leaderRouter.route('/:leaderId')
+promoRouter.route('/:promoId')
 .get((req, res, next) =>{
-    Leaders.findById(req.params.leaderId)
-    .then((leader) => {
-        console.log('Leader created', leader);
+    Promos.findById(req.params.promoId)
+    .then((promo) => {
+        console.log('Promo created', promo);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(leader);
+        res.json(promo);
     }, (err)=> next(err))
     .catch((err) => next(err));
 })
 .post((req,res,next) => {
     res.statusCode = 403;
-    res.end('POST request not supported on leader: '+ req.params.leaderId);
+    res.end('POST request not supported on promo: '+ req.params.promoId);
 })
 .put((req,res,next) => {
-    Leaders.findByIdAndUpdate(req.params.leaderId, {
+    Promos.findByIdAndUpdate(req.params.promoId, {
         $set: req.body
     }, {
         new: true
     })
-    .then((leader) => {
-        console.log('Promo updated', leader);
+    .then((promo) => {
+        console.log('Promo updated', promo);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(leader);
+        res.json(promo);
     }, (err)=> next(err))
     .catch((err) => next(err));
 })
 .delete((req, res, next) =>{
-    Leaders.findByIdAndRemove(req.params.leaderId)
-    .then((leader) => {
-        console.log('Promo removed', leader);
+    Promos.findByIdAndRemove(req.params.promoId)
+    .then((promo) => {
+        console.log('Promo removed', promo);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(leader);
+        res.json(promo);
     }, (err)=> next(err))
     .catch((err) => next(err));
 });
 
-module.exports = leaderRouter;
+module.exports = promoRouter;
